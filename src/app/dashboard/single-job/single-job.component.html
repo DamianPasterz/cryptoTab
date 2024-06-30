@@ -2,13 +2,13 @@
   class="container"
   [style.--numberOfTrade]="ROW_HEIGHT * symbol().amount + 'rem'"
   [style.--ROW_HEIGHT]="ROW_HEIGHT + 'rem'"
-  [ngClass]="{ 'container--expanded': isExpanded | async }"
+  [ngClass]="{ 'container--expanded': isExpanded }"
 >
   <div class="container__first-row">
     <div class="container__first-row__symbol">
       <div #greeting class="container__first-row__symbol__expand" (click)="expandDetails()">
         <img
-          [ngClass]="{ 'container__first-row__symbol__expand__icon': isExpanded | async }"
+          [ngClass]="{ 'container__first-row__symbol__expand__icon': isExpanded }"
           src="../../../assets/svg/icon_chevron.svg"
         />
       </div>

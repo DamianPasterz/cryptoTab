@@ -115,6 +115,15 @@ export class TradeAggregationService {
     delete currentData[symbol];
     this._detailsData$.next(currentData);
 
+    if (orderIds.length == 0) {
+      return;
+    }
+
+    if (orderIds.length === 1) {
+      this.toastService.showToast({ message: `Zamknięto zlecenie nr ${orderIds.join(', ')}`, orderId: orderIds });
+      return;
+    }
+
     this.toastService.showToast({ message: `Zamknięto zlecenia nr ${orderIds.join(', ')}`, orderId: orderIds });
     this.webSocketService.unsubscribe([symbol]);
   }

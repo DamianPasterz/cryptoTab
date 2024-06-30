@@ -16,16 +16,14 @@ import { DetailsComponent } from './details/details.component';
 export class SingleJobComponent {
   private tradeAggregationService = inject(TradeAggregationService);
   public response = inject(TradeAggregationService).detailsData$;
-  public isExpanded = inject(TradeAggregationService).isExpand$;
 
   public symbol = input.required<TradeAggregates>();
 
-  // public isExpanded = false;
+  public isExpanded = false;
   public ROW_HEIGHT = 4;
 
   public expandDetails(): void {
-    this.tradeAggregationService.expandRow();
-    // this.isExpanded = !this.isExpanded;
+    this.isExpanded = !this.isExpanded;
   }
 
   deleteGroup(): void {

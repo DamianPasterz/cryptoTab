@@ -22,7 +22,6 @@ export interface GroupedTrades {
 export class DashboardComponent implements OnInit {
   public tradeAggregationService = inject(TradeAggregationService);
   public groupedTrades$ = inject(TradeAggregationService).aggregatesData$;
-
   public trades: Trade[] = [];
 
   ngOnInit(): void {
