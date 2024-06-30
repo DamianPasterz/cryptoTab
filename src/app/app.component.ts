@@ -1,8 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
 import { ThemeService } from '@core/services/themeService.service';
-import { ToastComponent } from './notification/toast/toast.component';
+import { ToastComponent } from '@notification/toast/toast.component';
 
 @Component({
   selector: 'app-root',

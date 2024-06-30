@@ -1,10 +1,10 @@
 .container {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: var(--ROW_HEIGHT) 0rem;
+  grid-template-rows: var(--row-height) 0rem;
   transition: all 1s;
-  background-color: var(--primary-dark-bg);
-  color: var(--primary-dark-text);
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
 
   &__first-row {
     display: grid;
@@ -12,9 +12,9 @@
     grid-row: 5rem;
     grid-template-columns: repeat(8, 1fr) 10rem;
     grid-template-rows: 4rem;
-    background-color: var(--row-dark-bg);
+    background-color: var(--row-bg);
     &:hover {
-      background-color: var(--row-dark-hover-bg);
+      background-color: var(--row-hover-bg);
     }
 
     &__symbol {
@@ -55,6 +55,7 @@
         margin-left: 0.5rem;
         border-radius: 50%;
         background-color: gray;
+        color: var(--primary-text);
       }
     }
 
@@ -124,12 +125,12 @@
     display: grid;
     grid-column: 1/-1;
     grid-row: 2;
-    background-color: var(--row-dark-bg);
+    background-color: var(--row-bg);
     overflow: hidden;
   }
 }
 
 .container--expanded {
-  grid-template-rows: var(--ROW_HEIGHT) var(--numberOfTrade);
+  grid-template-rows: var(--row-height) var(--number-of-trade);
   transition: all 3s;
 }

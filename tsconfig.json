@@ -23,7 +23,7 @@
       "@state/*": ["src/app/state/*"],
       "@core/*": ["src/app/core/*"],
       "@env/*": ["src/app/environments/*"],
-      "@shared/*": ["src/app/shared/*"],
+      "@notification/*": ["src/app/notification/*"],
       "@app/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"]
     }

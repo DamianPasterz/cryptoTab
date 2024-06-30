@@ -1,7 +1,7 @@
 <div
   class="container"
-  [style.--numberOfTrade]="ROW_HEIGHT * symbol().amount + 'rem'"
-  [style.--ROW_HEIGHT]="ROW_HEIGHT + 'rem'"
+  [style.--number-of-trade]="ROW_HEIGHT * symbol().amount + 'rem'"
+  [style.--row-height]="ROW_HEIGHT + 'rem'"
   [ngClass]="{ 'container--expanded': isExpanded }"
 >
   <div class="container__first-row">
@@ -38,7 +38,7 @@
   </div>
 
   <div class="container__second-row">
-    @for ((item of (response | async)?.[symbol().symbol] ); track $index) {
+    @for ((item of (details | async)?.[symbol().symbol] ); track $index) {
       <app-details [symbol]="item" (deleteID)="deleteTrade($event)"></app-details>
     }
   </div>

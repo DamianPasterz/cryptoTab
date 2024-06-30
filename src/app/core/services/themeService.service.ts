@@ -27,7 +27,7 @@ export class ThemeService {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
-  initTheme(): void {
+  public initTheme(): void {
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark )');
     this.applyTheme(prefersDarkScheme.matches ? this.darkTheme : this.lightTheme);
     prefersDarkScheme.addEventListener('change', (event) => {
@@ -35,13 +35,13 @@ export class ThemeService {
     });
   }
 
-  applyTheme(theme: { [key: string]: string }): void {
+  private applyTheme(theme: { [key: string]: string }): void {
     for (const [key, value] of Object.entries(theme)) {
       document.documentElement.style.setProperty(key, value);
     }
   }
 
-  toggleTheme(isDarkMode: boolean): void {
+  public toggleTheme(isDarkMode: boolean): void {
     this.applyTheme(isDarkMode ? this.darkTheme : this.lightTheme);
   }
 }

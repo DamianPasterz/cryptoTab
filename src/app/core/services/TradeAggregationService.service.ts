@@ -3,8 +3,14 @@ import { Trade, TradeSide, TradeSymbol } from '@core/http/http.model';
 import { HttpService } from '@core/http/http.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { GroupedTrades, GroupedUpdateTrades, TradeAggregates, UpdateTrade } from './TradeAggregationService.models';
 import { ToastService } from './toast.service';
+
+import {
+  GroupedTrades,
+  GroupedUpdateTrades,
+  TradeAggregates,
+  UpdateTrade,
+} from '@core/services/tradeAggregationService.models';
 import { WebSocketService } from './websocket.service';
 
 @UntilDestroy()
@@ -21,9 +27,6 @@ export class TradeAggregationService {
 
   private _detailsData$ = new BehaviorSubject<GroupedUpdateTrades>({});
   public detailsData$: Observable<GroupedUpdateTrades> = this._detailsData$.asObservable();
-
-  private _isExpand$ = new BehaviorSubject<boolean>(false);
-  public isExpand$: Observable<boolean> = this._isExpand$.asObservable();
 
   constructor() {
     this.webSocketService
@@ -166,10 +169,5 @@ export class TradeAggregationService {
 
   private subscribeToWebSocket(symbols: string[]): void {
     this.webSocketService.subscribe(symbols);
-  }
-
-  public expandRow(): void {
-    const value = this._isExpand$.value;
-    this._isExpand$.next(!value);
   }
 }

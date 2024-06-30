@@ -2,8 +2,8 @@
   display: grid;
   grid-template-columns: repeat(8, 1fr) 3rem;
   grid-template-rows: 4rem;
-  background-color: var(--row-dark-bg);
-  color: var(--primary-dark-text);
+  background-color: var(--row-bg);
+  color: var(--primary-text);
   align-items: center;
   & > div {
     display: flex;

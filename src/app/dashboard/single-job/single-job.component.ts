@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 
-import { TradeAggregates } from '@core/services/TradeAggregationService.models';
-import { TradeAggregationService } from '@core/services/TradeAggregationService.service';
+import { TradeAggregates } from '@core/services/tradeAggregationService.models';
+import { TradeAggregationService } from '@core/services/tradeAggregationService.service';
 import { DetailsComponent } from './details/details.component';
 
 @Component({
@@ -15,8 +15,8 @@ import { DetailsComponent } from './details/details.component';
 })
 export class SingleJobComponent {
   private tradeAggregationService = inject(TradeAggregationService);
-  public response = inject(TradeAggregationService).detailsData$;
 
+  public details = inject(TradeAggregationService).detailsData$;
   public symbol = input.required<TradeAggregates>();
 
   public isExpanded = false;
@@ -26,11 +26,11 @@ export class SingleJobComponent {
     this.isExpanded = !this.isExpanded;
   }
 
-  deleteGroup(): void {
+  public deleteGroup(): void {
     this.tradeAggregationService.deleteGroup(this.symbol().symbol);
   }
 
-  deleteTrade(tradeId: number): void {
+  public deleteTrade(tradeId: number): void {
     this.tradeAggregationService.deleteTrade(this.symbol().symbol, tradeId);
   }
 }

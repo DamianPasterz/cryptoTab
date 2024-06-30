@@ -2,14 +2,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Trade } from '@core/http/http.model';
-import { TradeAggregationService } from '@core/services/TradeAggregationService.service';
+import { TradeAggregationService } from '@core/services/tradeAggregationService.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
+
 import { HeaderComponent } from './header/header.component';
 import { SingleJobComponent } from './single-job/single-job.component';
 
-export interface GroupedTrades {
-  [key: string]: Trade[];
-}
 @UntilDestroy()
 @Component({
   selector: 'app-dashboard',
@@ -26,9 +24,5 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.tradeAggregationService.getData();
-  }
-
-  trackByIndex(index: number): number {
-    return index;
   }
 }

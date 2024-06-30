@@ -19,18 +19,16 @@ export class WebSocketService {
     };
 
     this.socket.onopen = () => {
-      console.log('WebSocket connection established');
       this.isConnected = true;
       this.flushMessageQueue();
     };
 
     this.socket.onclose = () => {
-      console.log('WebSocket connection closed');
       this.isConnected = false;
     };
   }
 
-  sendMessage(message: any): void {
+  private sendMessage(message: any): void {
     if (this.isConnected) {
       this.socket.send(JSON.stringify(message));
     } else {
@@ -38,15 +36,15 @@ export class WebSocketService {
     }
   }
 
-  getMessages(): Observable<any> {
+  public getMessages(): Observable<any> {
     return this.messages$.asObservable();
   }
 
-  subscribe(symbols: string[]): void {
+  public subscribe(symbols: string[]): void {
     this.sendMessage({ p: '/subscribe/addlist', d: symbols });
   }
 
-  unsubscribe(symbols: string[]): void {
+  public unsubscribe(symbols: string[]): void {
     this.sendMessage({ p: '/subscribe/removelist', d: symbols });
   }
 

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+
 import { DateFormatPipe } from '@core/pipe/date-format.pipe';
-import { TradeAggregationService } from '@core/services/TradeAggregationService.service';
+import { UpdateTrade } from '@core/services/tradeAggregationService.models';
+import { TradeAggregationService } from '@core/services/tradeAggregationService.service';
 
 @Component({
   selector: 'app-details',
@@ -13,6 +15,6 @@ import { TradeAggregationService } from '@core/services/TradeAggregationService.
 })
 export class DetailsComponent {
   tradeAggregationService = inject(TradeAggregationService);
-  public symbol = input.required<any>();
+  public symbol = input.required<UpdateTrade>();
   public deleteID = output<number>();
 }
