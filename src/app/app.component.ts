@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from '@core/services/themeService.service';
 import { ToastComponent } from './notification/toast/toast.component';
@@ -10,6 +10,7 @@ import { ToastComponent } from './notification/toast/toast.component';
   imports: [RouterOutlet, HttpClientModule, ToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   private themeService = inject(ThemeService);
@@ -19,8 +20,6 @@ export class AppComponent implements OnInit {
   }
 
   public toggleTheme(isDarkMode: boolean): void {
-    console.log('jestem', isDarkMode);
-
     this.themeService.toggleTheme(isDarkMode);
   }
 }

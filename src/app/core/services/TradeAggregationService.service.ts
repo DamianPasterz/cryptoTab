@@ -3,28 +3,9 @@ import { Trade, TradeSide, TradeSymbol } from '@core/http/http.model';
 import { HttpService } from '@core/http/http.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { GroupedTrades, GroupedUpdateTrades, TradeAggregates, UpdateTrade } from './TradeAggregationService.models';
 import { ToastService } from './toast.service';
-
-export interface TradeAggregates {
-  symbol: string;
-  sizeSum: number;
-  openPriceAverage: number;
-  swapSum: number;
-  groupProfit: number;
-  amount: number;
-}
-
-interface GroupedTrades {
-  [key: string]: Trade[];
-}
-
-export interface UpdateTrade extends Trade {
-  profit: number;
-}
-
-interface GroupedUpdateTrades {
-  [key: string]: UpdateTrade[];
-}
+import { WebSocketService } from './websocket.service';
 
 @UntilDestroy()
 @Injectable({
@@ -33,9 +14,7 @@ interface GroupedUpdateTrades {
 export class TradeAggregationService {
   private http = inject(HttpService);
   private toastService = inject(ToastService);
-
-  private _responseData$ = new BehaviorSubject<GroupedTrades>({});
-  public responseData$: Observable<GroupedTrades> = this._responseData$.asObservable();
+  private webSocketService = inject(WebSocketService);
 
   private _aggregatesData$ = new BehaviorSubject<TradeAggregates[]>([]);
   public aggregatesData$: Observable<TradeAggregates[]> = this._aggregatesData$.asObservable();
@@ -43,17 +22,28 @@ export class TradeAggregationService {
   private _detailsData$ = new BehaviorSubject<GroupedUpdateTrades>({});
   public detailsData$: Observable<GroupedUpdateTrades> = this._detailsData$.asObservable();
 
-  public getData(): void {
-    this.http
-      .getData()
+  private _isExpand$ = new BehaviorSubject<boolean>(false);
+  public isExpand$: Observable<boolean> = this._isExpand$.asObservable();
+
+  constructor() {
+    this.webSocketService
+      .getMessages()
       .pipe(untilDestroyed(this))
-      .subscribe((response) => {
-        const groupedTrades = this.groupTrades(response.data);
-        this._responseData$.next(groupedTrades);
-        const updatedTrades = this.calculateDetailsData(groupedTrades);
-        this._detailsData$.next(updatedTrades);
-        this.calculateAggregates(updatedTrades);
+      .subscribe((message) => {
+        if (message.p === '/quotes/subscribed') {
+          this.updatePrices(message.d);
+        }
       });
+  }
+
+  public getData(): void {
+    this.http.getData().subscribe((response) => {
+      const groupedTrades = this.groupTrades(response.data);
+      const updatedTrades = this.calculateDetailsData(groupedTrades);
+      this._detailsData$.next(updatedTrades);
+      this.calculateAggregates(updatedTrades);
+      this.subscribeToWebSocket(Object.keys(groupedTrades));
+    });
   }
 
   private groupTrades(trades: Trade[]): GroupedTrades {
@@ -82,7 +72,7 @@ export class TradeAggregationService {
     const updatedTrades: UpdateTrade[] = [];
     Object.values(groupedTrades).forEach((trades) => {
       trades.forEach((item) => {
-        const profit = this.calculateProfit(item);
+        const profit = this.calculateProfit(item, item.closePrice);
         updatedTrades.push({ ...item, profit });
       });
     });
@@ -125,20 +115,11 @@ export class TradeAggregationService {
     delete currentData[symbol];
     this._detailsData$.next(currentData);
 
-    if (orderIds.length === 0) {
-      return;
-    }
-    if (orderIds.length === 1) {
-      this.toastService.showToast({ message: `Zamknięto zlecenie nr ${orderIds.join(', ')}`, orderId: orderIds });
-      return;
-    }
-
     this.toastService.showToast({ message: `Zamknięto zlecenia nr ${orderIds.join(', ')}`, orderId: orderIds });
+    this.webSocketService.unsubscribe([symbol]);
   }
 
   public deleteTrade(symbol: string, tradeId: number): void {
-    console.log(tradeId);
-
     const currentData = this._detailsData$.value;
     if (currentData[symbol]) {
       currentData[symbol] = currentData[symbol].filter((trade) => trade.id !== tradeId);
@@ -147,14 +128,39 @@ export class TradeAggregationService {
       } else {
         this._detailsData$.next(currentData);
         this.calculateAggregates(currentData);
+        this.toastService.showToast({ message: `Zamknięto zlecenie nr ${tradeId}`, orderId: tradeId });
       }
     }
-    this.toastService.showToast({ message: `Zamknięto zlecenie nr ${tradeId}`, orderId: tradeId });
   }
 
-  private calculateProfit(trade: Trade): number {
+  private calculateProfit(trade: Trade, currentPrice: number): number {
     const multiplier = trade.symbol === TradeSymbol.BTCUSD ? 100 : trade.symbol === TradeSymbol.ETHUSD ? 1000 : 10;
     const sideMultiplier = trade.side === TradeSide.BUY ? 1 : -1;
-    return ((trade.closePrice - trade.openPrice) * multiplier * sideMultiplier) / 100;
+    return ((currentPrice - trade.openPrice) * multiplier * sideMultiplier) / 100;
+  }
+
+  private updatePrices(quotes: { s: string; b: number }[]): void {
+    const currentData = this._detailsData$.value;
+    quotes.forEach((quote) => {
+      const symbol = quote.s;
+      const currentPrice = quote.b;
+      if (currentData[symbol]) {
+        currentData[symbol] = currentData[symbol].map((trade) => ({
+          ...trade,
+          profit: this.calculateProfit(trade, currentPrice),
+        }));
+      }
+    });
+    this._detailsData$.next(currentData);
+    this.calculateAggregates(currentData);
+  }
+
+  private subscribeToWebSocket(symbols: string[]): void {
+    this.webSocketService.subscribe(symbols);
+  }
+
+  public expandRow(): void {
+    const value = this._isExpand$.value;
+    this._isExpand$.next(!value);
   }
 }

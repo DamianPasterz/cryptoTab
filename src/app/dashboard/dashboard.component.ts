@@ -28,4 +28,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.tradeAggregationService.getData();
   }
+
+  trackByIndex(index: number): number {
+    return index;
+  }
 }

@@ -29,10 +29,7 @@ export class ThemeService {
 
   initTheme(): void {
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark )');
-    console.log('prefersDarkScheme', prefersDarkScheme);
-
     this.applyTheme(prefersDarkScheme.matches ? this.darkTheme : this.lightTheme);
-
     prefersDarkScheme.addEventListener('change', (event) => {
       this.applyTheme(event.matches ? this.darkTheme : this.lightTheme);
     });
