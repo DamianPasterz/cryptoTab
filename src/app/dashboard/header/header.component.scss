@@ -1,0 +1,16 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr) 3rem;
+  grid-template-rows: 5rem;
+  background-color: var(--row-bg);
+  color: var(--primary-text);
+  align-items: center;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: var(--row-bg);
+  }
+}

@@ -1,0 +1,15 @@
+<div class="container">
+  <div></div>
+  <div>{{ symbol().id }}</div>
+  <div>{{ symbol().side }}</div>
+  <div>{{ symbol().size }}</div>
+  <div>{{ symbol().openTime | dateFormat }}</div>
+  <div>{{ symbol().openPrice }}</div>
+  <div>{{ symbol().swap }}</div>
+  <div [ngClass]="{ negativeProfit: symbol().profit < 0, positiveProfit: symbol().profit > 0 }">
+    {{ symbol().profit | number: '1.0-4' }}
+  </div>
+  <div class="container__delete" (click)="deleteID.emit(symbol().id)">
+    <img src="../../../assets/svg/icon_delete.svg" />
+  </div>
+</div>

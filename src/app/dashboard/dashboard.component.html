@@ -1,0 +1,6 @@
+<div class="container">
+  <app-header />
+  <ng-container *ngFor="let item of groupedTrades$ | async">
+    <app-single-job [symbol]="item" />
+  </ng-container>
+</div>

@@ -1,0 +1,47 @@
+<div
+  class="container"
+  [style.--numberOfTrade]="ROW_HEIGHT * symbol().amount + 'rem'"
+  [style.--ROW_HEIGHT]="ROW_HEIGHT + 'rem'"
+  [ngClass]="{ 'container--expanded': isExpanded }"
+>
+  <div class="container__first-row">
+    <div class="container__first-row__symbol">
+      <div #greeting class="container__first-row__symbol__expand" (click)="expandDetails()">
+        <img
+          [ngClass]="{ 'container__first-row__symbol__expand__icon': isExpanded }"
+          src="../../../assets/svg/icon_chevron.svg"
+        />
+      </div>
+      <div class="container__first-row__symbol__text">{{ symbol().symbol }}</div>
+      <p class="container__first-row__symbol__number-of-trades">{{ symbol().amount }}</p>
+    </div>
+    <div class="container__first-row__number-of-trades"></div>
+    <div class="container__first-row__size">{{ symbol().sizeSum }}</div>
+    <div class="container__first-row__open-price">
+      {{ symbol().openPriceAverage | number: '1.2-2' }}
+    </div>
+    <div class="container__first-row__swap">
+      {{ symbol().swapSum | number: '1.2-2' }}
+    </div>
+    <div
+      class="container__first-row__profit"
+      [ngClass]="{
+        negativeProfit: symbol().groupProfit! < 0,
+        positiveProfit: symbol().groupProfit! > 0,
+      }"
+    >
+      {{ symbol().groupProfit | number: '1.0-4' }}
+    </div>
+    <div class="container__first-row__delete" (click)="deleteGroup()">
+      <img src="../../../assets/svg/icon_multi_delete.svg" />
+    </div>
+  </div>
+
+  <div class="container__second-row">
+    <!-- @for ((item on response ) ; track $index) { -->
+    <ng-container *ngFor="let item of (response | async)?.[symbol().symbol]">
+      <app-details [symbol]="item" (deleteID)="deleteTrade($event)"></app-details>
+    </ng-container>
+    <!-- } -->
+  </div>
+</div>

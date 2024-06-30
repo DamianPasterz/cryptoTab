@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="container__toast">
+    <app-toast></app-toast>
+  </div>
+  <router-outlet />
+  <div class="theme-toggle">
+    <button (click)="toggleTheme(true)">Dark Mode</button>
+    <button (click)="toggleTheme(false)">Light Mode</button>
+  </div>
+</div>

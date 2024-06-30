@@ -1,0 +1,4 @@
+<div *ngFor="let toast of toasts; let i = index" class="toast">
+  <div class="toast__message">{{ toast.message }}</div>
+  <div class="toast__close" (click)="removeToast(i)">X</div>
+</div>

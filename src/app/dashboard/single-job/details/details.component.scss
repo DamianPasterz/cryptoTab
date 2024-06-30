@@ -1,0 +1,38 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr) 3rem;
+  grid-template-rows: 4rem;
+  background-color: var(--row-dark-bg);
+  color: var(--primary-dark-text);
+  align-items: center;
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 9;
+    grid-row: 1;
+    padding-right: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+    & > img {
+      filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(190deg) brightness(10%) contrast(100%);
+      cursor: pointer;
+      &:hover {
+        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(160deg) brightness(100%) contrast(100%);
+      }
+    }
+  }
+}
+
+// .negativeProfit {
+//   color: var(--profit-negative);
+// }
+
+// .positiveProfit {
+//   color: var(--profit-positive);
+// }
