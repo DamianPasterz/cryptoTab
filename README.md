@@ -23,7 +23,7 @@ Crypto Trading Dashboard to aplikacja webowa do zarządzania transakcjami krypto
 1. Sklonuj repozytorium:
 
 ```sh
- git clone https://github.com/twoje-repozytorium.git
+ git clone https://github.com/DamianPasterz/cryptoTab.git
 Przejdź do katalogu projektu:
 ```
 
